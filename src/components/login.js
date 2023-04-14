@@ -85,11 +85,12 @@ export const Login = () => {
     signInWithFacebook().then(
       (useCredential) => {
         navigateTo('/home');
-      },
-      (error) => {
-        openModal(error.message);
-      },
-    );
+      }
+      
+    ).catch((error) => {
+      console.log(error);
+      openModal(error.message);
+    });
   });
 
   div.querySelector('.signup-btn').addEventListener('click', (e) => {
