@@ -3,7 +3,6 @@ import { registerWithEmail } from '../helpers/accederCongmail.js';
 import logoBlanco from '../assets/logoPrincipal.png';
 import iconoNegro from '../assets/iconoNavegador.png';
 
-
 export const Register = () => {
   document.body.classList.add('others-background');
   document.body.classList.remove('home-background');
