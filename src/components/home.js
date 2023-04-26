@@ -2,7 +2,7 @@
 /* eslint-disable no-shadow */
 import { getAuth, signOut } from 'firebase/auth';
 import {
-  collection, query, getDocs, addDoc, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove,
+  collection, query, getDocs, addDoc, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove, orderBy,
 } from 'firebase/firestore';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ref, uploadBytes, getDownloadURL } from '@firebase/storage';
@@ -25,15 +25,18 @@ export const Home = () => {
     <h1>Wanderlust</h1>
     <img class="cerrar-sesion" src="${iconoSalir}" alt="Cerrar sesión">
     </header>
-    <h1>¡Hola, Bienvenidx a wanderlust !</h1>
+    <h2>¡Hola, Bienvenidx a wanderlust !</h2>
     <div class="container-post">
     <form id="post-form" class="post-form">
     <p>¿Cuál ha sido tu destino de viaje favorito hasta ahora y por qué lo recomendarías?</p>
     <div class="contenedor-img-text">
     <textarea id="post-content" placeholder="Cuéntanos tus aventuras......" ></textarea>
-    <input type="file" id="post-image" >
+    <div class="drop-container">
+    <span style="color:black;"class="drop-title">Selecciona una imagen de tus viajes</span>
+    <input type="file"  class="post-image" id="post-image" >
     </div>
-    <div class="contenedor-btn-publicar"><button type="submit" class='btn-registros'>Publicar</button></div>
+    </div>
+    <div class="contenedor-btn-publicar"><button type="submit" class='btn-publicar'>Publicar</button></div>
     </form>
     <div id="post-list"></div>
     </div>
@@ -61,10 +64,10 @@ export const Home = () => {
       postDiv.innerHTML = ` 
       <header class="post-header">
       <img class="post-author-photo" src="${publicacion.autorPhotoURL ? publicacion.autorPhotoURL : `https://ui-avatars.com/api/?name=${publicacion.autor}&size=96&background=007bff&color=fff&rounded=true`}" alt="Foto de perfil de ${publicacion.autor}">
-      <p>Publicado por ${publicacion.autor} el ${publicacion.fecha_creacion.toDate().toLocaleString()}</p>
+      <p>${publicacion.autor} ${publicacion.fecha_creacion.toDate().toLocaleString()}</p>
       </header>
         ${publicacion.image ? `<div class="contenedor-img-post"><img class="post-imagen" src="${publicacion.image}" alt="Imagen de la publicación"></div>` : '<div class="post-imagen-vacia"></div>'}
-        <p class="texto-descripcion">${publicacion.descripcion}</p>
+        <p class="texto-descripcion"><strong>${publicacion.autor}</strong>  ${publicacion.descripcion}</p>
       <div class="contenedor-edicion">
       </div>
       <div class="contenedor-like">
@@ -199,7 +202,7 @@ export const Home = () => {
   /* obtener las publicaciones almacenadas en una colección Firestore de
   Firebase y devolverlas como un array de objetos que contienen el ID del documento y sus datos. */
   const obtenerPublicaciones = async () => {
-    const q = query(collection(db, 'publicaciones'));
+    const q = query(collection(db, 'publicaciones'), orderBy('fecha_creacion', 'desc'));
     const querySnapshot = await getDocs(q);
     const publicaciones = [];
     querySnapshot.forEach((doc) => {
