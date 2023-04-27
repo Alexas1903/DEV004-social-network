@@ -63,11 +63,14 @@ export const Home = () => {
       postDiv.className = 'post';
       postDiv.innerHTML = ` 
       <header class="post-header">
+      <div class="sub-header-post">
       <img class="post-author-photo" src="${publicacion.autorPhotoURL ? publicacion.autorPhotoURL : `https://ui-avatars.com/api/?name=${publicacion.autor}&size=96&background=007bff&color=fff&rounded=true`}" alt="Foto de perfil de ${publicacion.autor}">
-      <p>${publicacion.autor} ${publicacion.fecha_creacion.toDate().toLocaleString()}</p>
+      <p><strong>${publicacion.autor}</strong></p>
+      </div>
+      <p>${publicacion.fecha_creacion.toDate().toLocaleString()}</p>
       </header>
         ${publicacion.image ? `<div class="contenedor-img-post"><img class="post-imagen" src="${publicacion.image}" alt="Imagen de la publicación"></div>` : '<div class="post-imagen-vacia"></div>'}
-        <p class="texto-descripcion"><strong>${publicacion.autor}</strong>  ${publicacion.descripcion}</p>
+      <p class="texto-descripcion"><strong>${publicacion.autor}</strong>  ${publicacion.descripcion}</p>
       <div class="contenedor-edicion">
       </div>
       <div class="contenedor-like">
@@ -146,10 +149,12 @@ export const Home = () => {
             const form = document.createElement('div');
             form.className = 'form-edicion';
             form.innerHTML = `
+            <div class="contenedor-inputs-editar">
             <label for="descripcion">Descripción:</label>
-            <input type="text" id="descripcion"  name="descripcion" value="${publicacion.descripcion}">
+            <textarea id="descripcion"  name="descripcion">${publicacion.descripcion}</textarea>
             <label for="imagen">Imagen:</label>
             <input type="file" id="imagen" name="imagen">
+            </div>
             <div class="contenedor-btn-edit">
             <button type="button" id="guardar" class="btn-guardar">Guardar</button>
             <button type="button" id="cancelar" class="btn-cancelar">Cancelar</button>
@@ -177,12 +182,17 @@ export const Home = () => {
                 // Actualizar la descripción de la publicación
                 const docRef = doc(db, 'publicaciones', publicacion.id);
                 await updateDoc(docRef, { descripcion: nuevoContenido });
+                const publicaciones = await obtenerPublicaciones();
+                mostrarPublicaciones(publicaciones);
+                // eslint-disable-next-line max-len
                 // Si se seleccionó una nueva imagen, subirla al storage y actualizar la URL de la imagen en la base de datos
                 if (nuevaImagen) {
                   const storageRef = ref(storage, `images/${nuevaImagen.name}`);
                   const snapshot = await uploadBytes(storageRef, nuevaImagen);
                   const nuevaUrlImagen = await getDownloadURL(snapshot.ref);
                   await updateDoc(docRef, { image: nuevaUrlImagen });
+                  const publicaciones = await obtenerPublicaciones();
+                  mostrarPublicaciones(publicaciones);
                 }
                 // Actualizar la descripción en la página
                 publicacion.descripcion = nuevoContenido;

@@ -160,7 +160,7 @@ a{
   width: 80%; /* Could be more or less, depending on screen size */
 }
 .close {
-  color: #aaa;
+  color: #565255;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -263,7 +263,11 @@ margin:20px ;
 .contenedor-btn-post img{
   width: 40px;
   height: 40px;
+  cursor: pointer;
 }
+.contenedor-inputs-editar{
+  flex-direction: column;
+   display: flex;}
 .form-edicion{
   margin: 20px;
   align-items: center;
@@ -360,13 +364,20 @@ h2{
     height: 80px;
     border-radius: 50%;
     text-align: left;
+    margin-right:10px ;
+}
+.sub-header-post{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 #contenedor-msj{
   background-color: #fefefe;
-  margin: auto; /* 15% from the top and centered */
+  margin-top: 50%; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
+  height: fit-content;
 }
 
 #mensaje-envio {
@@ -410,7 +421,6 @@ border-radius: 20px;
   background: url("likeLleno.png");
   background-size: contain;
   padding: 25px;
-  margin-left: 30px;
   background-position:center;
   cursor: pointer;
 }
@@ -419,7 +429,6 @@ border-radius: 20px;
   background: url("likeVacio.png");
   background-size: contain;
   padding: 25px;
-  margin-left: 30px;
   background-position:center;
   cursor: pointer;
 }
@@ -433,13 +442,11 @@ width: fit-content;
   .contenedores-r-r span{
     color: white ;
   }
-  .close{
-    color: #0d16b9;
-  }
+
   .span-register{
     margin-bottom: 20px;
   }
- 
+
   .icono-restablecer{
     margin-bottom:15% ;
   }
